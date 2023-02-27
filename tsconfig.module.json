@@ -1,0 +1,15 @@
+{
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "outDir": "./module-dist/",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationDir": "./module-dist/types",
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es6",
+    "jsx": "react",
+    "allowJs": true,
+    "strictNullChecks": true
+  }
+}
