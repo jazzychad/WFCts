@@ -6,8 +6,8 @@ export default class Tile<T> {
 
   public entropy = 0
   public options: TileOption<T>[] = []
-  private alternatives: TileOption<T>[] = [] // used after being collapsed, in case of backtracking
-  private collapseOrder = -1
+  public alternatives: TileOption<T>[] = [] // used after being collapsed, in case of backtracking
+  public collapseOrder = -1
 
   public get isCollapsed(): Boolean {
     return this.options.length == 1
