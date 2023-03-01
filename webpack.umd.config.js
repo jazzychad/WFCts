@@ -24,6 +24,6 @@ module.exports = {
     filename: "index.js",
     library: "WFCModule",
     libraryTarget: "umd",
-    path: path.resolve(__dirname, "umd-dist"),
+    path: path.resolve(__dirname, ".dist/umd"),
   },
 };

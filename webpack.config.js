@@ -20,6 +20,6 @@ module.exports = {
     filename: "index.js",
     library: "WFC",
     libraryTarget: "commonjs2",
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, ".dist/local"),
   },
 };

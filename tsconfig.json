@@ -1,10 +1,10 @@
 {
   "include": ["src/**/*"],
   "compilerOptions": {
-    "outDir": "./dist/",
+    "outDir": "./.dist/local/",
     "sourceMap": true,
     "declaration": true,
-    "declarationDir": "./dist/types",
+    "declarationDir": "./.dist/local/types",
     "noImplicitAny": true,
     "module": "es6",
     "target": "es6",

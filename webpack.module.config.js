@@ -24,6 +24,6 @@ module.exports = {
     filename: "index.js",
     library: "WFC",
     libraryTarget: "commonjs2",
-    path: path.resolve(__dirname, "module-dist"),
+    path: path.resolve(__dirname, ".dist/module"),
   },
 };

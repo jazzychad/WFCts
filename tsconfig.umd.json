@@ -1,10 +1,10 @@
 {
   "include": ["src/**/*"],
   "compilerOptions": {
-    "outDir": "./umd-dist/",
+    "outDir": "./.dist/umd/",
     "sourceMap": false,
     "declaration": true,
-    "declarationDir": "./umd-dist/types",
+    "declarationDir": "./.dist/umd/types",
     "noImplicitAny": true,
     "module": "es6",
     "target": "es6",
