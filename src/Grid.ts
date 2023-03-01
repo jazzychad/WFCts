@@ -1,3 +1,4 @@
+import PropagationStrategy from "./PropagationStrategy"
 import Tile from "./Tile"
 import TileOption from "./TileOption"
 import { PropagationResult } from "./Types"
@@ -6,6 +7,7 @@ import WFC from "./WFC"
 export default class Grid<T> {
     public rows: number
     public cols: number
+    public propagationStrategy: PropagationStrategy<T>
 
     public tileOptions: TileOption<T>[] = []
     public collapsedTiles: Tile<T>[] = []
@@ -19,7 +21,7 @@ export default class Grid<T> {
         this.cols = cols
     }
 
-    private setCollapseOrder(tile: Tile<T>) {
+    public setCollapseOrder(tile: Tile<T>) {
         tile.collapseOrder = this.collapseOrder
         this.collapseOrder++
     }
