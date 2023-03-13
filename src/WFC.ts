@@ -1,7 +1,16 @@
 import Tile from "./Tile";
 import Grid from "./Grid";
-import { PropagationResult } from "./Types";
+import { AdjacencyDirection, AdjacencyIdentifer, PropagationResult } from "./Types";
 import TileOption from "./TileOption";
+declare global {
+    interface String {
+        reverse(): string
+    }
+}
+
+String.prototype.reverse = function(this: string) {
+    return this.split('').reverse().join('')
+}
 
 enum UpdateResult {
     needsUpdate,
@@ -32,7 +41,39 @@ export default class WFC {
     }
 
     public static generateAdjacencyRules<T>(options: TileOption<T>[]) {
-        // todo
+        for (let option of options) {
+            let north: AdjacencyIdentifer[] = []
+            let east: AdjacencyIdentifer[] = []
+            let south: AdjacencyIdentifer[] = []
+            let west: AdjacencyIdentifer[] = []
+
+            for (let candidate of options) {
+                // north
+                if (candidate.sockets.at(AdjacencyDirection.south).reverse() === option.sockets.at(AdjacencyDirection.north)) {
+                    north.push(candidate.adjacencyIdentifier)
+                }
+
+                 // east
+                 if (candidate.sockets.at(AdjacencyDirection.west).reverse() === option.sockets.at(AdjacencyDirection.east)) {
+                    east.push(candidate.adjacencyIdentifier)
+                }
+
+                 // south
+                 if (candidate.sockets.at(AdjacencyDirection.north).reverse() === option.sockets.at(AdjacencyDirection.south)) {
+                    south.push(candidate.adjacencyIdentifier)
+                }
+
+                 // west
+                 if (candidate.sockets.at(AdjacencyDirection.east).reverse() === option.sockets.at(AdjacencyDirection.west)) {
+                    west.push(candidate.adjacencyIdentifier)
+                }
+            }
+
+            option.adjacencies[AdjacencyDirection.north] = new Set<AdjacencyIdentifer>(north)
+            option.adjacencies[AdjacencyDirection.east] = new Set<AdjacencyIdentifer>(east)
+            option.adjacencies[AdjacencyDirection.south] = new Set<AdjacencyIdentifer>(south)
+            option.adjacencies[AdjacencyDirection.west] = new Set<AdjacencyIdentifer>(west)
+        }
     }
 
     public static propagateTile<T>(
