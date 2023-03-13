@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js",
     "buildmodule": "webpack --config webpack.module.config.js",
-    "buildumd": "webpack --config webpack.umd.config.js"
+    "buildumd": "webpack --config webpack.umd.config.js",
+    "prepublish": "webpack --config webpack.umd.config.js"
   },
   "keywords": [],
   "author": "",

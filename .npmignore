@@ -1,0 +1,4 @@
+.dist/local/
+.dist/module/
+.vscode/
+.DS_Store
