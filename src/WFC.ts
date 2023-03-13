@@ -4,9 +4,9 @@ import { PropagationResult } from "./Types";
 import TileOption from "./TileOption";
 
 enum UpdateResult {
-    NeedsUpdate,
-    NoAction,
-    Conflict
+    needsUpdate,
+    noAction,
+    conflict
 }
 
 export default class WFC {
@@ -38,25 +38,24 @@ export default class WFC {
     public static propagateTile<T>(
         initialTile: Tile<T>,
         grid: Grid<T>,
-        // shouldPropagateTile: (tile: Tile<T>, grid: Grid<T>) => boolean,
-        // neighborsForTile: (tile: Tile<T>, grid: Grid<T>) => Tile<T>[],
-        // validOptionsForNeighbor: (neighborTile: Tile<T>, forTile: Tile<T>, grid: Grid<T>) => TileOption<T>[],
         depth: number = 0): PropagationResult {
 
             const updateNeighbor = (neighborTile: Tile<T>, forTile: Tile<T>): UpdateResult => {
-                if (!grid.propagationStrategy.shouldPropagateTile(neighborTile, grid)) {
-                    return UpdateResult.NoAction
+                if (grid.propagationStrategy.shouldPropagateTile !== undefined && !grid.propagationStrategy.shouldPropagateTile(forTile, grid)) {
+                    // should not propagate
+                    return UpdateResult.noAction
                 }
 
                 let newOptions: TileOption<T>[] = []
                 let origOptionsCount = neighborTile.options.length
-                let origOptions = neighborTile.options.slice()
+                //let origOptions = neighborTile.options.slice()
                 newOptions = grid.propagationStrategy.validOptionsForNeighbor(neighborTile, forTile, grid)
-                neighborTile.options = newOptions
-
                 if (newOptions.length === 0) {
-                    return UpdateResult.Conflict
+                    return UpdateResult.conflict
                 }
+
+                // we are ok to set the new options to the neighbor
+                neighborTile.options = newOptions
 
                 if (newOptions.length === 1) {
                     if (neighborTile.collapseOrder === -1 && !neighborTile.isFixed) {
@@ -68,10 +67,10 @@ export default class WFC {
                     if (newOptions.length > origOptionsCount) {
                         throw new Error('newOptions is larger than original options count!')
                     }
-                    return UpdateResult.NeedsUpdate
+                    return UpdateResult.needsUpdate
                 }
 
-                return UpdateResult.NoAction
+                return UpdateResult.noAction
             }
 
             let que: Tile<T>[] = [initialTile]
@@ -86,20 +85,20 @@ export default class WFC {
                 let neighborTiles = grid.propagationStrategy.neighborsForTile(tile, grid)
                 for (let neighbor of neighborTiles) {
                     let result = updateNeighbor(neighbor, tile)
-                    if (result === UpdateResult.NeedsUpdate) {
+                    if (result === UpdateResult.needsUpdate) {
                         let idx = que.indexOf(neighbor)
                         if (idx !== -1) {
-                            que.splice(idx)
+                            que.splice(idx, 1)
                         }
                         que.push(neighbor)
-                    } else if (result === UpdateResult.Conflict) {
+                    } else if (result === UpdateResult.conflict) {
                         return PropagationResult.failure
                     }
                 }
 
             }
-        
-        return PropagationResult.success
+
+            return PropagationResult.success
     }
 
     public static minimumEntropyTile<T>(grid: Grid<T>): Tile<T> | undefined {
@@ -147,10 +146,13 @@ export default class WFC {
         let alternativeOptions = tile.options
         let idx = alternativeOptions.indexOf(chosenOption)
         if (idx !== -1){
-            alternativeOptions.splice(idx)
+            alternativeOptions.splice(idx, 1)
         }
 
         tile.options = [chosenOption]
+        if (tile.isFixed) {
+            throw new Error("trying to collapse a fixed tile's options 2.")
+        }
         tile.alternatives = alternativeOptions
         tile.entropy = -1
 

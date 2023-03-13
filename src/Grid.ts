@@ -2,7 +2,7 @@ import PropagationStrategy from "./PropagationStrategy"
 import Tile from "./Tile"
 import TileOption from "./TileOption"
 import { PropagationResult } from "./Types"
-import WFC from "./WFC"
+import  WFC from "./WFC"
 
 export default class Grid<T> {
     public rows: number
@@ -59,6 +59,7 @@ export default class Grid<T> {
                     // re-set the collapseORder so that if re-propagation below fails, it will be reset
                     lastCollapsedTile.collapseOrder = order
                     this.collapseOrder = order + 1
+                    // DO NOT DO THIS // this.collapsedTiles.push(lastCollapsedTile)
                 }
 
                 // reset tiles
@@ -92,7 +93,14 @@ export default class Grid<T> {
     }
 
     private resetTile(tile: Tile<T>) {
-        tile.options = this.tileOptions
+        if (tile.isFixed) {
+            throw new Error("trying to reset a fixed tile!")
+        }
+        if (this.propagationStrategy.resetTileOptions) {
+            tile.options = this.propagationStrategy.resetTileOptions(tile, this)
+        } else {
+            tile.options = this.tileOptions
+        }
         tile.updateEntropy()
         tile.collapseOrder = -1
         tile.alternatives = []

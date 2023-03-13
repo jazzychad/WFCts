@@ -1,7 +1,17 @@
-export * as Types from './Types'
-export * as Grid from './Grid'
-export * as Tile from './Tile'
-export * as TileOption from './TileOption'
-export * as SocketDescriptor from './SocketDescriptor'
-export * as WFC from './WFC'
-export * as PropagationStrategy from './PropagationStrategy'
+import * as Types from './Types'
+import Grid from './Grid'
+import Tile from './Tile'
+import TileOption from './TileOption'
+import SocketDescriptor from './SocketDescriptor'
+import WFC from './WFC'
+import PropagationStrategy from './PropagationStrategy'
+
+export {
+    Types,
+    Grid,
+    Tile,
+    TileOption,
+    SocketDescriptor,
+    WFC,
+    PropagationStrategy,
+}

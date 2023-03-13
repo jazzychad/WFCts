@@ -90,7 +90,7 @@ export default class TileOption<T> {
         return option
     }
 
-    public flipTileOption(direction: Types.FlipDirection, adjacencyIdentifier: Types.AdjacencyIdentifer | undefined = undefined): TileOption<T> {
+    public flippedTileOption(direction: Types.FlipDirection, adjacencyIdentifier: Types.AdjacencyIdentifer | undefined = undefined): TileOption<T> {
         let option = new TileOption<T>(this.value)
         option.weight = this.weight
         option.adjacencyIdentifier = adjacencyIdentifier ?? this.adjacencyIdentifier
@@ -99,6 +99,9 @@ export default class TileOption<T> {
         option.rotations = this.rotations
         option.isFlippedHorizontally = (direction === Types.FlipDirection.horrizontal) ? !this.isFlippedHorizontally : this.isFlippedHorizontally
         option.isFlippedVertically = (direction === Types.FlipDirection.veritcal) ? !this.isFlippedVertically : this.isFlippedVertically
+
+        option.flipAdjacencies(direction)
+        option.flipSockets(direction)
 
         return option
     }

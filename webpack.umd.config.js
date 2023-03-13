@@ -25,5 +25,6 @@ module.exports = {
     library: "WFCModule",
     libraryTarget: "umd",
     path: path.resolve(__dirname, ".dist/umd"),
+    globalObject: 'this'
   },
 };
