@@ -14,8 +14,9 @@ export default class TileOption<T> {
     public adjacencies: AdjacencyMap = {}
     public sockets = new SocketDescriptor("", "", "", "") // up to programmer to correctly assign this later
 
-    constructor(value: T) {
+    constructor(value: T, weight: number = 1) {
         this.value = value
+        this.weight = weight
 
         this.adjacencies[Types.AdjacencyDirection.north] = new Set<Types.AdjacencyIdentifer>()
         this.adjacencies[Types.AdjacencyDirection.east] = new Set<Types.AdjacencyIdentifer>()

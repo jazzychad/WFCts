@@ -65,27 +65,30 @@ export default class Grid<T> {
                 // reset tiles
                 for (let row of this.tiles) {
                     for (let tile of row) {
-                        if (tile.collapseOrder > order) {
-                            this.resetTile(tile)
-                        }
-
                         // nuke all propagated knowledge from uncollapsed tiles,
-                        // they will be recalculated in next loop
-                        if (!tile.isCollapsed) {
+                        // they will be recalculated below
+                        if (tile.collapseOrder > order || (!tile.isCollapsed && tile !== lastCollapsedTile)) {
                             this.resetTile(tile)
                         }
                     }
                 }
 
                 // re-propagate everything
+                let shouldBreak = false
                 for (let row of this.tiles) {
                     for (let tile of row) {
                         if (tile.isCollapsed) {
                             let result = WFC.propagateTile(tile, this, 999)
-                            if (result === PropagationResult.failure)
-                            // unwinding backtracking due to bad propagation
-                            found = false
+                            if (result === PropagationResult.failure) {
+                                // unwinding backtracking due to bad propagation
+                                found = false
+                                shouldBreak = true
+                                break
+                            }
                         }
+                    }
+                    if (shouldBreak) {
+                        break
                     }
                 }
             }
