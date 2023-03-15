@@ -100,9 +100,9 @@ export default class Grid<T> {
             throw new Error("trying to reset a fixed tile!")
         }
         if (this.propagationStrategy.resetTileOptions) {
-            tile.options = this.propagationStrategy.resetTileOptions(tile, this)
+            tile.options = [...this.propagationStrategy.resetTileOptions(tile, this)] // must make a copy
         } else {
-            tile.options = this.tileOptions
+            tile.options = [...this.tileOptions] // must make a copy
         }
         tile.updateEntropy()
         tile.collapseOrder = -1
