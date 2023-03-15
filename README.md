@@ -5,6 +5,7 @@ A TypeScript implementation of the Wave Function Collapse algorithm
 ## Building
 
 `npm install --save-dev`
+
 `npm run buildumd`
 
 ### TODO
