@@ -1,6 +1,6 @@
 # WFCts
 
-A TypeScript implementatino of the Wave Function Collapse algorithm
+A TypeScript implementation of the Wave Function Collapse algorithm
 
 ### TODO
 
