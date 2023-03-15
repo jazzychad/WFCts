@@ -87,10 +87,9 @@ export default class WFC {
                     return UpdateResult.noAction
                 }
 
-                let newOptions: TileOption<T>[] = []
+                let newOptions: TileOption<T>[] = grid.propagationStrategy.validOptionsForNeighbor(neighborTile, forTile, grid)
                 let origOptionsCount = neighborTile.options.length
                 //let origOptions = neighborTile.options.slice()
-                newOptions = grid.propagationStrategy.validOptionsForNeighbor(neighborTile, forTile, grid)
                 if (newOptions.length === 0) {
                     return UpdateResult.conflict
                 }
@@ -192,7 +191,7 @@ export default class WFC {
 
         tile.options = [chosenOption]
         if (tile.isFixed) {
-            throw new Error("trying to collapse a fixed tile's options 2.")
+            throw new Error("trying to collapse a fixed tile's options.")
         }
         tile.alternatives = alternativeOptions
         tile.entropy = -1
