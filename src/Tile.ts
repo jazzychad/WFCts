@@ -8,8 +8,9 @@ export default class Tile<T> {
   public options: TileOption<T>[] = []
   public alternatives: TileOption<T>[] = [] // used after being collapsed, in case of backtracking
   public collapseOrder = -1
+  public forciblyCollapsed: boolean = false
   public isFixed: boolean = false // whether this tile is "pre-collapsed" (such as a given value in sudoku puzzle)
-
+  
   public get isCollapsed(): Boolean {
     return this.options.length == 1
   }

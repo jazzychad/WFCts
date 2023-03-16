@@ -27,6 +27,7 @@ export default class Grid<T> {
     }
 
     public backtrack() {
+        console.log("--------")
         // get the last forcibly collapsed tile (collapsedTile.last) "LAST"
         // move its alternatives to the options
         // recalculate its entropy
@@ -37,12 +38,16 @@ export default class Grid<T> {
         // if LAST's alternatives.count == 0, then we go backward in the collapsedTile array and repeat
 
         let found = false
+        let loopCount = 0
         
         while (!found) {
+            console.log(loopCount++)
             if (this.collapsedTiles.length === 0) {
                 throw new Error("We ran out of backtracking tiles... this is very bad")
             }
+            console.log("L", this.collapsedTiles.length)
             let lastCollapsedTile = this.collapsedTiles.pop()!
+            console.log("c:", lastCollapsedTile.row, lastCollapsedTile.col, "--", lastCollapsedTile.alternatives.length)
             if (lastCollapsedTile.alternatives.length > 0) {
                 found = true
                 // need to reset all the tiles collapsed after this tile
@@ -62,6 +67,9 @@ export default class Grid<T> {
                     // DO NOT DO THIS // this.collapsedTiles.push(lastCollapsedTile)
                 }
 
+
+                let prevCount = this.collapsedTiles.length
+
                 // reset tiles
                 for (let row of this.tiles) {
                     for (let tile of row) {
@@ -73,6 +81,8 @@ export default class Grid<T> {
                     }
                 }
 
+                
+
                 // re-propagate everything
                 let shouldBreak = false
                 for (let row of this.tiles) {
@@ -81,6 +91,7 @@ export default class Grid<T> {
                             let result = WFC.propagateTile(tile, this, 999)
                             if (result === PropagationResult.failure) {
                                 // unwinding backtracking due to bad propagation
+                                console.log("...f")
                                 found = false
                                 shouldBreak = true
                                 break
@@ -90,6 +101,10 @@ export default class Grid<T> {
                     if (shouldBreak) {
                         break
                     }
+                }
+
+                if (this.collapsedTiles.length != prevCount) {
+                    throw new Error("collapsedTiles count mismatch")
                 }
             }
         }
@@ -106,6 +121,7 @@ export default class Grid<T> {
         }
         tile.updateEntropy()
         tile.collapseOrder = -1
+        tile.forciblyCollapsed = false
         tile.alternatives = []
     }
 }

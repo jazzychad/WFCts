@@ -94,8 +94,14 @@ export default class WFC {
                     return UpdateResult.conflict
                 }
 
+                //debug
+                let oldOptionsSet = new Set<TileOption<T>>(neighborTile.options)
+
                 // we are ok to set the new options to the neighbor
                 neighborTile.options = newOptions
+
+                //debug
+                let newOptionsSet = new Set<TileOption<T>>(neighborTile.options)
 
                 if (newOptions.length === 1) {
                     if (neighborTile.collapseOrder === -1 && !neighborTile.isFixed) {
@@ -108,6 +114,12 @@ export default class WFC {
                         throw new Error('newOptions is larger than original options count!')
                     }
                     return UpdateResult.needsUpdate
+                }
+
+                //debug
+                let intersect = new Set([...newOptions].filter(i => oldOptionsSet.has(i)));
+                if (intersect.size != newOptions.length || intersect.size != oldOptionsSet.size) {
+                    throw new Error("laskdfjalskfjalsfkjsaldkfsdlkfjslkfj")
                 }
 
                 return UpdateResult.noAction
@@ -169,6 +181,9 @@ export default class WFC {
             throw new Error(`attempting to collapse a tile with ${tile.options.length} options..`)
         }
 
+        //debug
+        console.log("collapsing: ", tile.row, tile.col, "--", tile.entropy, "--", grid.collapsedTiles.length)
+
         let sumWeights = tile.options.reduce((acc, option) => {
             return acc + option.weight
         }, 0)
@@ -195,6 +210,7 @@ export default class WFC {
         }
         tile.alternatives = alternativeOptions
         tile.entropy = -1
+        tile.forciblyCollapsed = true
 
         grid.setCollapseOrder(tile)
         grid.collapsedTiles.push(tile)
